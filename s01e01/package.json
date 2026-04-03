@@ -1,0 +1,15 @@
+{
+  "name": "s01e01",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "mrdarmac",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "csv-parser": "^3.2.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "brave_ai_devs_4",
+  "version": "1.0.0",
+  "description": "Solutions to AI_devs 4 course.",
+  "license": "ISC",
+  "author": "mrdarmac",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.0"
+  }
+}
