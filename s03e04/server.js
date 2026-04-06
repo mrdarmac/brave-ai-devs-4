@@ -60,7 +60,7 @@ async function parseNaturalLanguage(query) {
         messages: [
           {
             role: "user",
-            content: `Z podanego tekstu wypisz TYLKO nazwę przedmiotu (po polsku). Nie dodawaj żadnego dodatkowego tekstu, komentarzy ani cudzysłowów.\nTekst: "${query}"`,
+            content: `Z podanego tekstu wypisz nazwę przedmiotu wraz z kluczowymi parametrami technicznymi (napięcie, moc, pojemność itp.). Zachowaj wszystkie istotne specyfikacje. Nie dodawaj żadnego dodatkowego tekstu, komentarzy ani cudzysłowów.\nTekst: "${query}"`,
           },
         ],
         max_tokens: 50,
@@ -77,20 +77,13 @@ async function parseNaturalLanguage(query) {
 }
 
 function findItemCode(query) {
-  const normalizedQuery = query
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-
+  const queryWords = query.toLowerCase().split(/[\s\n]+/).filter(w => w.length > 0);
+  
   for (const [code, name] of itemsMap) {
-    const normalizedName = name
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-    if (
-      normalizedName.includes(normalizedQuery) ||
-      normalizedQuery.includes(normalizedName)
-    ) {
+    const itemWords = name.toLowerCase().split(/[\s\n]+/).filter(w => w.length > 0);
+    const allMatch = queryWords.every(word => itemWords.includes(word));
+    if (allMatch) {
+      console.log(`Matched: "${name}"`);
       return code;
     }
   }
