@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 const vision = async function (
   prompt,
   image_url,
@@ -68,6 +68,6 @@ console.log("⚡Starting.");
   `;
   const damLocation = await vision(
     visionPrompt,
-    `/data/${AIDEVS_KEY}/drone.png`,
+    `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/drone.png`,
   );
 */

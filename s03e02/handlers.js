@@ -1,7 +1,7 @@
-import { AIDEVS_KEY } from "../config.js";
+import { AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 const handlers = {
   shellAPI: async function (cmd) {
-    const response = await fetch("/api/shell", {
+    const response = await fetch(`${AIDEVS_API_URL}/api/shell`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -13,7 +13,7 @@ const handlers = {
     return response.json();
   },
   verify: async function (code) {
-    const response = await fetch("/verify", {
+    const response = await fetch(`${AIDEVS_API_URL}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

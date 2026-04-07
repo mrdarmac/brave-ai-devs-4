@@ -1,10 +1,11 @@
+import { AIDEVS_API_URL } from "../config.js";
 import vision from "./vision.js";
 
 const handlers = {
   async getContent(documentName) {
-    console.log(`Fetching: /dane/doc/${documentName}`);
+    console.log(`Fetching: ${AIDEVS_API_URL}/dane/doc/${documentName}`);
     const response = await fetch(
-      `/dane/doc/${documentName}`,
+      `${AIDEVS_API_URL}/dane/doc/${documentName}`,
     );
 
     if (!response.ok) {

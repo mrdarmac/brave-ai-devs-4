@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_API_URL } from "../config.js";
 
 const vision = async function (imageName) {
   const prompt = `Your task is to analyze the attached image and extract text from it exactly as it is.
@@ -29,7 +29,7 @@ const vision = async function (imageName) {
               {
                 type: "image_url",
                 image_url: {
-                  url: `/dane/doc/${imageName}`,
+                  url: `${AIDEVS_API_URL}/dane/doc/${imageName}`,
                 },
               },
             ],

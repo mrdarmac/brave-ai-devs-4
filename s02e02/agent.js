@@ -1,7 +1,7 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 const agent = async function (history, tools, handlers) {
   await fetch(
-    `/data/${AIDEVS_KEY}/electricity.png?reset=1`,
+    `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/electricity.png?reset=1`,
   );
   console.log("Board reset");
 

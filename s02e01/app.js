@@ -1,7 +1,7 @@
-import { AIDEVS_KEY } from "../config.js";
+import { AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 
 const downloadCSV = async function () {
-  const url = `/data/${AIDEVS_KEY}/categorize.csv`;
+  const url = `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/categorize.csv`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -24,7 +24,7 @@ const downloadCSV = async function () {
 };
 
 const verify = async function (prompt) {
-  const response = await fetch("/verify", {
+  const response = await fetch(`${AIDEVS_API_URL}/verify`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

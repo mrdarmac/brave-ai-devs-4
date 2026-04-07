@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 
 const systemPrompt = `Your job is to shorten log report that user will deliver from power plant system.
 Shorten descriptions aggressively to be more concise.
@@ -19,7 +19,7 @@ Return ONLY processed log content, any extra comments are not needed.`;
 
 const getLogs = async function () {
   const response = await fetch(
-    `/data/${AIDEVS_KEY}/failure.log`,
+    `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/failure.log`,
     {
       method: "GET",
       headers: {
@@ -45,7 +45,7 @@ const getLogs = async function () {
 };
 
 const verify = async function (logs) {
-  const response = await fetch("/verify", {
+  const response = await fetch(`${AIDEVS_API_URL}/verify`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

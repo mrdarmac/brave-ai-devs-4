@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 import { readFile } from "fs/promises";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -183,7 +183,7 @@ async function getAllNegativeNotes(uniqueNotes) {
 }
 
 async function verify(notes) {
-  const response = await fetch("/verify", {
+  const response = await fetch(`${AIDEVS_API_URL}/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -1,6 +1,6 @@
-import { AIDEVS_KEY } from "../config.js";
+import { AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 async function verify(serverURL) {
-  const response = await fetch("/verify", {
+  const response = await fetch(`${AIDEVS_API_URL}/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -22,7 +22,7 @@ async function verify(serverURL) {
 }
 
 async function check() {
-  const response = await fetch("/verify", {
+  const response = await fetch(`${AIDEVS_API_URL}/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

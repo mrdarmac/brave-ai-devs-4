@@ -1,4 +1,4 @@
-import { AIDEVS_KEY } from "../config.js";
+import { AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 
 const handlers = {
   api_interact: async function (body) {
@@ -6,7 +6,7 @@ const handlers = {
       apikey: AIDEVS_KEY,
       ...body,
     };
-    const response = await fetch("/api/zmail", {
+    const response = await fetch(`${AIDEVS_API_URL}/api/zmail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +19,7 @@ const handlers = {
   },
   verify: async function ({ answer }) {
     console.log(`CALLING VERIFY:`, answer);
-    const response = await fetch("/verify", {
+    const response = await fetch(`${AIDEVS_API_URL}/verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

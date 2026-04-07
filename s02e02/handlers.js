@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 const handlers = {
   getBoard: async function () {
     const prompt = `You are given a 3x3 electricity puzzle board image.
@@ -48,7 +48,7 @@ const handlers = {
                   {
                     type: "image_url",
                     image_url: {
-                      url: `/data/${AIDEVS_KEY}/electricity.png`,
+                      url: `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/electricity.png`,
                     },
                   },
                 ],
@@ -132,7 +132,7 @@ const handlers = {
     ];
 
     const rotate = async function (tile) {
-      const response = await fetch("/verify", {
+      const response = await fetch(`${AIDEVS_API_URL}/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

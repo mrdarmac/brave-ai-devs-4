@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 if (!OPENROUTER_KEY) {
   console.error("Error: API_KEY environment variable not set");
   process.exit(1);
@@ -70,7 +70,7 @@ const functionSchemas = [
 
 const handlers = {
   async get_locations(name, surname) {
-    const response = await fetch("/api/location", {
+    const response = await fetch(`${AIDEVS_API_URL}/api/location`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const handlers = {
     return { role: "system", message: "Incorrect suspect." };
   },
   async check_access_level(name, surname, birthYear) {
-    const response = await fetch("/api/accesslevel", {
+    const response = await fetch(`${AIDEVS_API_URL}/api/accesslevel`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -286,7 +286,7 @@ async function main() {
 
   // 2. Load findhim_locations.json
   const powerPlants = await fetch(
-    `/data/${AIDEVS_KEY}/findhim_locations.json`,
+    `${AIDEVS_API_URL}/data/${AIDEVS_KEY}/findhim_locations.json`,
   )
     .then((res) => res.json())
     .then((data) => {

@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 
 const tools = [
   {
@@ -25,7 +25,7 @@ const tools = [
 
 const handlers = {
   sendDroneInstructions: async function (instructions) {
-    const response = await fetch("/verify", {
+    const response = await fetch(`${AIDEVS_API_URL}/verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,4 +1,4 @@
-import { AIDEVS_KEY } from "../config.js";
+import { AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 const handlers = {
   call_API: async function (action, args) {
     const timestamp = new Date().toISOString();
@@ -8,7 +8,7 @@ const handlers = {
 
     while (true) {
       try {
-        const response = await fetch("/verify", {
+        const response = await fetch(`${AIDEVS_API_URL}/verify`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,4 +1,4 @@
-import { OPENROUTER_KEY, AIDEVS_KEY } from "../config.js";
+import { OPENROUTER_KEY, AIDEVS_KEY, AIDEVS_API_URL } from "../config.js";
 import fs from "fs";
 import csvParser from "csv-parser";
 if (!OPENROUTER_KEY) {
@@ -130,7 +130,7 @@ const apiCall = async function (inputArray, systemPrompt) {
 
     // WYSŁANIE WYNIKU I ODCZYTANIE FLAGI
 
-    const res = await fetch("/verify", {
+    const res = await fetch(`${AIDEVS_API_URL}/verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
