@@ -8,8 +8,8 @@ Make 4 specific changes in the OKO system using interactAPI, then call "done".
 
 ## Available Tools
 ### interactAPI
-
 Use this to interact with the central API at /verify:
+- First call with {action: "help"} to learn the API
 - Make changes to incidents and tasks
 - Call done when finished: { action: "done" }
 - ALL changes must be made through this tool
@@ -17,25 +17,25 @@ Use this to interact with the central API at /verify:
 ### browseOKO
 Browse the OKO web panel to READ current state:
 - Use paths like "/incydenty", "/zadania", "/notatki"
-- Returns cleaned HTML for reading only
+- "/notatki/380792b2c86d9c5be670b3bde48e187b" to find correct incident codes before editing incidents! IMPORTANT.
 - Use this to explore and understand the current state before making changes
 - Do NOT make changes through this tool
 
 ## Your Objectives (complete all 4 in Polish):
 
-1. CHANGE INCIDENT CLASSIFICATION: Find the incident about Skolwin city (Skolwin) and change its classification from vehicles/people seen to animals (zwierzęta). Use Polish terms.
+1. CHANGE INCIDENT CLASSIFICATION: Find the incident about Skolwin city. Change its classification from vehicles/people seen to animals.
 
 2. MARK TASK AS DONE: Find the task related to Skolwin in the task list, mark it as done, and write in its content that animals were seen (e.g., "bobry" - beavers).
 
-3. CREATE NEW INCIDENT: Create a new incident report about human movement (ruch ludzi) near Komarowo city to redirect operator attention away from Skolwin.
+3. CREATE NEW INCIDENT: Create(update) a new incident report about human movement (ruch ludzi) near Komarowo city to redirect operator attention away from Skolwin.
 
 4. CALL DONE: When all changes are made, call interactAPI with { action: "done" }.
 
 ## Important Rules
 - ALL changes must be in POLISH (the website is in Polish)
 - Use ONLY interactAPI for making changes
-- Use browseOKO only for reading/exploring the current state
-- Use interactAPI to discover available actions with { action: "help" }`;
+- Use browseOKO only for reading/exploring the website
+- Before editing browse "/notatki/380792b2c86d9c5be670b3bde48e187b" to learn ticked codes!`;
 
 let okoSession;
 
@@ -112,10 +112,10 @@ const handlers = {
     });
     return response.json();
   },
-  browseOKO: async function (path) {
+  browseOKO: async function ({ path }) {
     if (!okoSession) await loginToOko();
 
-    const res = await fetch(`${AIDEVS_OKO_API_URL}${path}`, {
+    const res = await fetch(`${AIDEVS_OKO_API_URL}/${path.replace(/^\//, "")}`, {
       headers: { Cookie: `oko_session=${okoSession}` },
     });
     let html = await res.text();
@@ -155,8 +155,58 @@ async function LLM(history) {
 }
 
 async function main() {
-  //   const help = await handlers.interactAPI({ action: "help" });
   await loginToOko();
+
+  const history = [];
+  const maxIterations = 20;
+  let taskComplete = false;
+
+  for (let i = 0; i < maxIterations; i++) {
+    const result = await LLM(history);
+    const assistantMsg = result.choices[0].message;
+
+    console.log("Agent:", assistantMsg.content);
+
+    if (!assistantMsg.tool_calls || assistantMsg.tool_calls.length === 0) {
+      break;
+    }
+
+    history.push({
+      role: "assistant",
+      content: assistantMsg.content,
+      tool_calls: assistantMsg.tool_calls,
+    });
+
+    for (const toolCall of assistantMsg.tool_calls) {
+      const toolName = toolCall.function.name;
+      const toolArgs = JSON.parse(toolCall.function.arguments);
+
+      console.log("Tool called:", toolName, JSON.stringify(toolArgs));
+
+      const toolResult = await handlers[toolName](toolArgs);
+
+      if (toolName === "browseOKO") {
+        console.log("Tool result: (browseOKO response)");
+      } else {
+        console.log("Tool result:", JSON.stringify(toolResult));
+
+        if (JSON.stringify(toolResult).includes("FLG")) {
+          console.log("Task complete! FLG received.");
+          taskComplete = true;
+        }
+      }
+
+      history.push({
+        role: "tool",
+        tool_call_id: toolCall.id,
+        content: JSON.stringify(toolResult),
+      });
+
+      if (taskComplete) break;
+    }
+
+    if (taskComplete) break;
+  }
 }
 
 await main();
