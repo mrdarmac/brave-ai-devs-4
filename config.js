@@ -7,3 +7,4 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 export const OPENROUTER_KEY = process.env.OPENROUTER_KEY;
 export const AIDEVS_KEY = process.env.AIDEVS_KEY;
 export const AIDEVS_API_URL = process.env.AIDEVS_API_URL;
+export const AIDEVS_OKO_API_URL = process.env.AIDEVS_OKO_API_URL;
