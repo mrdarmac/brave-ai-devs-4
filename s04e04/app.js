@@ -31,35 +31,17 @@ const tools = [
     function: {
       name: "interactAPI",
       description:
-        "Interact with the filesystem API. Use 'help' to discover available actions. Supports batch_mode with an array of actions.",
+        "Interact with the filesystem API. Use 'help' to discover available actions. Build a JSON string (single object or array for batch_mode).",
       parameters: {
-        oneOf: [
-          {
-            type: "object",
-            properties: {
-              action: {
-                type: "string",
-                description: "The filesystem action to perform",
-              },
-            },
-            required: ["action"],
-            additionalProperties: true,
+        type: "object",
+        properties: {
+          input: {
+            type: "string",
+            description:
+              'JSON string representing the action(s). Example single: \'{"action":"help"}\'. Example batch: \'[{"action":"createDirectory","path":"/miasta"},...]\'. Learn format from \'help\'.',
           },
-          {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                action: {
-                  type: "string",
-                  description: "The filesystem action to perform",
-                },
-              },
-              required: ["action"],
-              additionalProperties: true,
-            },
-          },
-        ],
+        },
+        required: ["input"],
       },
     },
   },
@@ -84,13 +66,14 @@ const tools = [
 
 const handlers = {
   interactAPI: async function (params) {
+    const input = JSON.parse(params.input);
     const response = await fetch(`${AIDEVS_API_URL}/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         apikey: AIDEVS_KEY,
         task: "filesystem",
-        answer: params,
+        answer: input,
       }),
     });
     return response.json();
